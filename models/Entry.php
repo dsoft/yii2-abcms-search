@@ -3,6 +3,7 @@
 namespace abcms\search\models;
 
 use Yii;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "search_entry".
@@ -13,6 +14,7 @@ use Yii;
  * @property integer $pk
  * @property string $url
  * @property string $updatedTime
+ * @property string $lang
  */
 class Entry extends \yii\db\ActiveRecord
 {
@@ -30,7 +32,7 @@ class Entry extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['typeId', 'url'], 'required'],
+            [['typeId', 'lang'], 'required'],
             [['typeId', 'modelId', 'pk'], 'integer'],
             [['updatedTime'], 'safe'],
             [['url'], 'string', 'max' => 255]
@@ -49,6 +51,12 @@ class Entry extends \yii\db\ActiveRecord
             'pk' => 'Primary Key',
             'url' => 'Url',
             'updatedTime' => 'Updated Time',
+            'lang' => 'Language',
         ];
+    }
+    
+    public function updateTime(){
+        $this->updatedTime = new Expression('NOW()');
+        $this->save(false);
     }
 }

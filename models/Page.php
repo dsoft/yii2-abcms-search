@@ -11,6 +11,7 @@ use Yii;
  * @property string $title
  * @property string $body
  * @property string $url
+ * @property string $lang
  */
 class Page extends \yii\db\ActiveRecord
 {
@@ -28,7 +29,7 @@ class Page extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'body', 'url'], 'required'],
+            [['title', 'body', 'url', 'lang'], 'required'],
             [['body'], 'string'],
             [['title', 'url'], 'string', 'max' => 255]
         ];
@@ -44,6 +45,7 @@ class Page extends \yii\db\ActiveRecord
             'title' => 'Title',
             'body' => 'Body',
             'url' => 'Url',
+            'lang' => 'Language',
         ];
     }
 }
