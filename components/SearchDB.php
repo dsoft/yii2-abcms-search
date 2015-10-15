@@ -71,7 +71,7 @@ class SearchDB extends Search
         if($lang) {
             $query->andWhere(['lang' => $lang]);
         }
-        if($limit && $offset) {
+        if($limit) {
             $query->limit($limit)->offset($offset);
         }
         return $query;

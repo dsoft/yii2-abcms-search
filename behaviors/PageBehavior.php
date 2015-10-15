@@ -84,7 +84,8 @@ class PageBehavior extends ModelBehavior
      */
     protected function getDescription()
     {
-        $html = $this->getHtmlFromRoute();
+        $html = $this->getHtmlFromRoute();   
+        $html = preg_replace('/&nbsp;/', '', $html);
         $contentSelector = $this->getContentSelector();
         if($contentSelector) {
             $dom = new Query($html, 'utf-8');
@@ -153,7 +154,7 @@ class PageBehavior extends ModelBehavior
     protected function getContentSelector()
     {
         $owner = $this->owner;
-        $result = $this->contentSelector ? $this->processParam('contentSelector') : $this->contentSelectorAttribute ? $owner->{$this->contentSelectorAttribute} : '';
+        $result = $this->contentSelector ? $this->processParam('contentSelector') : ($this->contentSelectorAttribute ? $owner->{$this->contentSelectorAttribute} : '');
         return $result;
     }
 

@@ -249,7 +249,7 @@ abstract class ModelBehavior extends \yii\base\Behavior
     protected function getDescription()
     {
         $owner = $this->owner;
-        $result = $this->description ? $this->processParam('description') : $this->descriptionAttribute ? $owner->{$this->descriptionAttribute} : '';
+        $result = $this->description ? $this->processParam('description') : ($this->descriptionAttribute ? $owner->{$this->descriptionAttribute} : '');
         return $result;
     }
 
