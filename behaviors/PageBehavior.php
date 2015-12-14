@@ -16,12 +16,23 @@ class PageBehavior extends ModelBehavior
      * The css selector of the content container
      */
     public $contentSelector = '';
-    
+
     /**
      * @var string
      * The owner attribute of the css selector of the content container
      */
     public $contentSelectorAttribute = '';
+
+    /**
+     * @var boolean True if curl should be used when getting the page HTML
+     */
+    public $curlEnabled = false;
+
+    /**
+     *
+     * @var boolean True if curl option CURLOPT_IPRESOLVE should be set to CURL_IPRESOLVE_V4
+     */
+    public $curlResolveIPV4Only = false;
 
     /**
      * @inheritdoc
@@ -84,7 +95,7 @@ class PageBehavior extends ModelBehavior
      */
     protected function getDescription()
     {
-        $html = $this->getHtmlFromRoute();   
+        $html = $this->getHtmlFromRoute();
         $html = preg_replace('/&nbsp;/', '', $html);
         $contentSelector = $this->getContentSelector();
         if($contentSelector) {
@@ -142,7 +153,20 @@ class PageBehavior extends ModelBehavior
         $route = $this->getRoute();
         $route['lang'] = Yii::$app->language;
         $url = \yii\helpers\Url::to($route, true);
-        $html = file_get_contents($url);
+        if(!$this->curlEnabled) {
+            $html = file_get_contents($url);
+        }
+        else {
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_HEADER, false);
+            if($this->curlResolveIPV4Only) {
+                curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+            }
+            $html = curl_exec($curl);
+            curl_close($curl);
+        }
         return $html;
     }
 
